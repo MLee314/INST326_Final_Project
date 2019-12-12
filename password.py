@@ -16,6 +16,23 @@ def delete_account(nickname, cursor):
     if (nickname_available(nickname, cursor) == False):
         cursor.execute(action)
 
+# This function updates the account information when given a nickname
+def update_account(nickname, cursor):
+    if nickname_available(nickname,cursor) == False:
+        decision = input('Enter 1 to update username, 2 to update password, or 3 to update both: ')
+        if int(decision) == 1:
+            username_change = input('Input username change : ')
+            cursor.execute('''UPDATE passwords SET username = '{}' WHERE nickname = '{}' '''.format(username_change, nickname))
+        elif int(decision) == 2:
+            password_change = input('Input password change : ')
+            cursor.execute('''UPDATE passwords SET password = '{}' WHERE nickname = '{}' '''.format(password_change, nickname))
+        elif int(decision) == 3:
+            username_change = input('Input username change : ')
+            password_change = input('Input password change : ')
+            cursor.execute('''UPDATE passwords SET username = '{}', password = '{}' WHERE nickname = '{}' '''.format(username_change, password_change, nickname))
+    else:
+        print('That nickname is not in use!')
+
 # This function retrieves all of the information given a nickname
 def retrieve_account(nickname, cursor):
     action='''SELECT * FROM passwords WHERE nickname = '{}' '''.format(nickname)
@@ -64,13 +81,18 @@ def main():
         # RETRIEVE PASSWORD
         elif user_input == '2':
             nickname = input('Enter the nickname of the account: ')
-            retrieve_account(nickname, cursor)
+            retrieve_account(nickname.lower(), cursor)
             conn.commit()
+
+        # UPDATE NICKNAME INFORMATION
+        elif user_input == '3':
+            nickname = input('Enter the nickname to update: ')
+            update_account(nickname.lower(), cursor)
 
         # DELETE PASSWORD
         elif user_input == '4':
             nickname = input('Enter the nickname of the account: ')
-            delete_account(nickname, cursor)
+            delete_account(nickname.lower(), cursor)
             print("Successfully Deleted!")
             conn.commit()
 
@@ -80,6 +102,6 @@ def main():
     print('\nGoodbye!')
     conn.commit()
     conn.close()
-    
+
 if __name__ == '__main__':
     main()
