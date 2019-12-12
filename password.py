@@ -35,10 +35,8 @@ def main():
 
             nickname = input('Enter a nickname: ')
             if nickname_available(nickname, cursor):
-
                 username = input('Enter a username or email address: ')
                 password = input('Enter a password: ')
-
 
                 cursor.execute('INSERT INTO passwords VALUES (?, ?, ?)',
                             (nickname, username, password))
