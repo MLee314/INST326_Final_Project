@@ -24,6 +24,7 @@ def nickname_available(nickname, cursor):
     list = cursor.fetchall()
     for i in list:
         if (nickname == ''.join(i)):
+            print('This nickname is already taken!')
             return False
     return True
 
