@@ -8,12 +8,14 @@ menu = '''Do you want to:
 2. Retrieve a password
 3. Quit'''
 
+# This function checks if a nickname is already present in the database.
 def nickname_available(nickname, cursor):
-    cursor.execute('''SELECT * FROM passwords ''')
-    if cursor.fetchall():
-        return True
-    else:
-        return False
+    cursor.execute('''SELECT nickname FROM passwords''')
+    list = cursor.fetchall()
+    for i in list:
+        if (nickname == ''.join(i)):
+            return False
+    return True
 
 def main():
     conn = sqlite3.connect('password.db')
@@ -25,6 +27,7 @@ def main():
 
     while user_input != '3':
         if user_input == '1':
+            # create table for first time users
             cursor.execute('''CREATE TABLE IF NOT EXISTS passwords
                     (nickname TEXT,
                     username TEXT,
