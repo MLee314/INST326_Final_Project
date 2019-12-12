@@ -4,9 +4,19 @@ import csv
 import sqlite3
 
 menu = '''Do you want to:
-1. Store a password
-2. Retrieve a password
-3. Quit'''
+1. Store an account
+2. Retrieve account information
+3. Update an existing account
+4. Delete an account
+5. Quit'''
+
+# This function retrieve all of the information given a nickname
+def retrieve_account(nickname, cursor):
+    cursor.execute('''SELECT * FROM passwords WHERE nickname = '{}' '''.format(nickname))
+    records = cursor.fetchall()
+    print("\nNickname: " + str(records[0][0]) +
+            "\nUsername: " + str(records[0][1]) +
+            "\nPassword: " + str(records[0][2]))
 
 # This function checks if a nickname is already present in the database.
 def nickname_available(nickname, cursor):
@@ -22,10 +32,10 @@ def main():
     cursor = conn.cursor()
 
     print('Welome to Password Saver')
-    print(menu)
+    print('\n' + menu)
     user_input = input("Enter a number: ")
 
-    while user_input != '3':
+    while user_input != '5':
         # STORE PASSWORD
         if user_input == '1':
             # create table for first time users
@@ -45,14 +55,13 @@ def main():
             conn.commit()
         # RETRIEVE PASSWORD
         elif user_input == '2':
-            nickname = input('Enter the nickname of the password you want to retrieve: ')
-            cursor.execute('''SELECT * FROM passwords WHERE name = '{}' '''.format(nickname))
-            records = cursor.fetchall()
-            print("Nickname: " + str(records[0][0]) + "\nUsername: " + str(records[0][1]) + "\nPassword: " + str(records[0][2]))
+            nickname = input('Enter the nickname of the account: ')
+            retrieve_account(nickname, cursor)
+
         print('\n' + menu)
         user_input = input("Enter a number: ")
 
-    print('Goodbye!')
+    print('\nGoodbye!')
     conn.commit()
     conn.close()
 if __name__ == '__main__':
