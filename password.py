@@ -26,6 +26,7 @@ def main():
     user_input = input("Enter a number: ")
 
     while user_input != '3':
+        # STORE PASSWORD
         if user_input == '1':
             # create table for first time users
             cursor.execute('''CREATE TABLE IF NOT EXISTS passwords
@@ -42,11 +43,13 @@ def main():
                             (nickname, username, password))
 
             conn.commit()
+        # RETRIEVE PASSWORD
         elif user_input == '2':
             nickname = input('Enter the nickname of the password you want to retrieve: ')
-            print(type(nickname))
-            cursor.execute('''SELECT * FROM passwords ''').fetchall()
-        print(menu)
+            cursor.execute('''SELECT * FROM passwords WHERE name = '{}' '''.format(nickname))
+            records = cursor.fetchall()
+            print("Nickname: " + str(records[0][0]) + "\nUsername: " + str(records[0][1]) + "\nPassword: " + str(records[0][2]))
+        print('\n' + menu)
         user_input = input("Enter a number: ")
 
     print('Goodbye!')
