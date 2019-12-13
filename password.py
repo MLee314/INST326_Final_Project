@@ -83,6 +83,7 @@ def main():
                     password TEXT)''')
 
             nickname = input('Enter a nickname: ')
+            # we use .lower() to remove case sensitivity
             if nickname_available(nickname.lower(), cursor):
                 username = input('Enter a username or email address: ')
                 password = input('Enter a password: ')
